@@ -4,14 +4,14 @@
     "apiVersion": "2015-06-15",
     "location": "[resourceGroup().location]",
     "tags": {
-        "displayName": "windowsVM1 Storage Account"
+        "displayName": "devpra1 Storage Account"
     },
     "properties": {
         "accountType": "Standard_LRS"
     }
 },
 {
-    "name": "windowsVM1-PublicIP",
+    "name": "devpra1-PublicIP",
     "type": "Microsoft.Network/publicIPAddresses",
     "apiVersion": "2018-08-01",
     "location": "[resourceGroup().location]",
@@ -21,12 +21,12 @@
     "properties": {
         "publicIPAllocationMethod": "Dynamic",
         "dnsSettings": {
-            "domainNameLabel": "[toLower('windowsVM1')]"
+            "domainNameLabel": "[toLower('devpra1')]"
         }
     }
 },
 {
-    "name": "windowsVM1-VirtualNetwork",
+    "name": "devpra1-VirtualNetwork",
     "type": "Microsoft.Network/virtualNetworks",
     "apiVersion": "2018-08-01",
     "location": "[resourceGroup().location]",
@@ -41,7 +41,7 @@
         },
         "subnets": [
             {
-                "name": "windowsVM1-VirtualNetwork-Subnet",
+                "name": "devpra1-VirtualNetwork-Subnet",
                 "properties": {
                     "addressPrefix": "10.0.0.0/24"
                 }
@@ -50,16 +50,16 @@
     }
 },
 {
-    "name": "windowsVM1-NetworkInterface",
+    "name": "devpra1-NetworkInterface",
     "type": "Microsoft.Network/networkInterfaces",
     "apiVersion": "2018-08-01",
     "location": "[resourceGroup().location]",
     "dependsOn": [
-        "[resourceId('Microsoft.Network/publicIPAddresses', 'windowsVM1-PublicIP')]",
-        "[resourceId('Microsoft.Network/virtualNetworks', 'windowsVM1-VirtualNetwork')]"
+        "[resourceId('Microsoft.Network/publicIPAddresses', 'devpra1-PublicIP')]",
+        "[resourceId('Microsoft.Network/virtualNetworks', 'devpra1-VirtualNetwork')]"
     ],
     "tags": {
-        "displayName": "windowsVM1 Network Interface"
+        "displayName": "devpra1 Network Interface"
     },
     "properties": {
         "ipConfigurations": [
@@ -68,10 +68,10 @@
                 "properties": {
                     "privateIPAllocationMethod": "Dynamic",
                     "publicIPAddress": {
-                        "id": "[resourceId('Microsoft.Network/publicIPAddresses', 'windowsVM1-PublicIP')]"
+                        "id": "[resourceId('Microsoft.Network/publicIPAddresses', 'devpra1-PublicIP')]"
                     },
                     "subnet": {
-                        "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', 'windowsVM1-VirtualNetwork', 'windowsVM1-VirtualNetwork-Subnet')]"
+                        "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', 'devpra1-VirtualNetwork', 'devpra1-VirtualNetwork-Subnet')]"
                     }
                 }
             }
@@ -79,23 +79,23 @@
     }
 },
 {
-    "name": "windowsVM1",
+    "name": "devpra1",
     "type": "Microsoft.Compute/virtualMachines",
     "apiVersion": "2017-03-30",
     "location": "[resourceGroup().location]",
     "dependsOn": [
         "[resourceId('Microsoft.Storage/storageAccounts', toLower('windowsVM1storage'))]",
-        "[resourceId('Microsoft.Network/networkInterfaces', 'windowsVM1-NetworkInterface')]"
+        "[resourceId('Microsoft.Network/networkInterfaces', 'devpra1-NetworkInterface')]"
     ],
     "tags": {
-        "displayName": "windowsVM1"
+        "displayName": "devpra1"
     },
     "properties": {
         "hardwareProfile": {
             "vmSize": "Standard_A2"
         },
         "osProfile": {
-            "computerName": "windowsVM1",
+            "computerName": "devpra1",
             "adminUsername": "adminUsername",
             "adminPassword": "adminPassword"
         },
@@ -115,7 +115,7 @@
         "networkProfile": {
             "networkInterfaces": [
                 {
-                    "id": "[resourceId('Microsoft.Network/networkInterfaces', 'windowsVM1-NetworkInterface')]"
+                    "id": "[resourceId('Microsoft.Network/networkInterfaces', 'devpra1-NetworkInterface')]"
                 }
             ]
         },
@@ -136,7 +136,7 @@
                 "displayName": "windowsVM1AzureDiagnostics"
             },
             "dependsOn": [
-                "[resourceId('Microsoft.Compute/virtualMachines', 'windowsVM1')]"
+                "[resourceId('Microsoft.Compute/virtualMachines', 'devpra1')]"
             ],
             "properties": {
                 "publisher": "Microsoft.Azure.Diagnostics",
